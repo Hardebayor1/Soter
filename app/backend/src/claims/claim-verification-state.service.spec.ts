@@ -40,12 +40,12 @@ describe('ClaimVerificationStateService', () => {
   const prismaMock = {
     claim: {
       findUnique: jest.fn<
-        Promise<{ id: string; status: ClaimStatus } | null>,
+        { id: string; status: ClaimStatus } | null,
         [unknown]
       >(),
     },
     auditLog: {
-      findMany: jest.fn<Promise<AuditRow[]>, [AuditArgs]>(),
+      findMany: jest.fn<AuditRow[], [AuditArgs]>(),
     },
   };
 
@@ -55,8 +55,8 @@ describe('ClaimVerificationStateService', () => {
     verificationRows = [];
     recordCommitted = true;
 
-    prismaMock.claim.findUnique.mockImplementation(async () => claimRow);
-    prismaMock.auditLog.findMany.mockImplementation(async args => {
+    prismaMock.claim.findUnique.mockImplementation(() => claimRow);
+    prismaMock.auditLog.findMany.mockImplementation(args => {
       // Emulates the indexed lookup: nothing is visible until the pipeline has
       // committed its verification record.
       if (!recordCommitted) {
