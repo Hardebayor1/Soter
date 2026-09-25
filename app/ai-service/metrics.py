@@ -90,6 +90,21 @@ REQUESTS_SHED_TOTAL = Counter(
     "Requests rejected due to overload (load shedding)",
     ["reason", "method", "endpoint"],
 )
+LOAD_SHED_QUEUE_DEPTH = Histogram(
+    "load_shed_queue_depth",
+    "Queue depth at the time of load shedding",
+    buckets=[10, 25, 50, 75, 100, 150, 200, 300, 500, 1000],
+)
+LOAD_SHED_PROVIDER_HEALTH = Counter(
+    "load_shed_provider_health_total",
+    "Load shedding decisions by provider health status",
+    ["provider_health"],
+)
+LOAD_SHED_BY_PRIORITY = Counter(
+    "load_shed_by_priority_total",
+    "Load shedding decisions by job priority",
+    ["priority"],
+)
 REQUEST_REJECTIONS_TOTAL = Counter(
     "api_request_rejections_total",
     "Requests rejected or constrained by request safety limits",

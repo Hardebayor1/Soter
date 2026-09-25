@@ -159,6 +159,11 @@ class Settings(BaseSettings):
     # Load shedding settings
     load_shed_memory_threshold_percent: float = 90.0
     load_shed_max_celery_queue_depth: int = 100
+    # Graduated queue depth thresholds for priority-based shedding
+    load_shed_high_celery_queue_depth: Optional[int] = 75
+    load_shed_low_celery_queue_depth: Optional[int] = 50
+    # Provider health threshold for degraded state (0.0-1.0)
+    load_shed_provider_degraded_threshold: float = 0.3
 
     # Dead-letter replay settings
     dead_letter_max_replay_attempts: int = 5
