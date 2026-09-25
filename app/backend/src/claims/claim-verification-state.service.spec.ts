@@ -226,16 +226,13 @@ describe('ClaimVerificationStateService', () => {
       recordCommitted = false;
 
       // Read A lands inside that window.
-      const duringWrite = await service.getState('claim-1');
+      const partial = await service.getState('claim-1');
 
-      // Read B is dispatched while the worker commits its record.
+      // Read B is dispatched while the worker commits its record, and lands
+      // after the commit.
       const concurrentRead = service.getState('claim-1');
       recordCommitted = true;
-
-      const [partial, committed] = await Promise.all([
-        duringWrite,
-        concurrentRead,
-      ]);
+      const committed = await concurrentRead;
 
       // The read that saw the partial write reports the disagreement instead
       // of a completion it cannot prove.
