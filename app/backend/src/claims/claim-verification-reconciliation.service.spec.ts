@@ -42,13 +42,10 @@ describe('ClaimVerificationReconciliationService', () => {
 
   const prismaMock = {
     claim: {
-      findMany: jest.fn<
-        Promise<{ id: string; status: ClaimStatus }[]>,
-        [unknown]
-      >(),
+      findMany: jest.fn<{ id: string; status: ClaimStatus }[], [unknown]>(),
     },
     auditLog: {
-      findMany: jest.fn<Promise<AuditRow[]>, [AuditArgs]>(),
+      findMany: jest.fn<AuditRow[], [AuditArgs]>(),
     },
   };
 
@@ -62,8 +59,8 @@ describe('ClaimVerificationReconciliationService', () => {
     claimRows = [];
     verificationRows = [];
 
-    prismaMock.claim.findMany.mockImplementation(async () => claimRows);
-    prismaMock.auditLog.findMany.mockImplementation(async args => {
+    prismaMock.claim.findMany.mockImplementation(() => claimRows);
+    prismaMock.auditLog.findMany.mockImplementation(args => {
       const entityId = args?.where?.entityId;
       return verificationRows.filter(row => {
         if (typeof entityId === 'string') {
@@ -233,7 +230,9 @@ describe('ClaimVerificationReconciliationService', () => {
     const errorSpy = jest
       .spyOn(Logger.prototype, 'error')
       .mockImplementation(() => undefined);
-    prismaMock.claim.findMany.mockRejectedValueOnce(new Error('database down'));
+    prismaMock.claim.findMany.mockImplementationOnce(() => {
+      throw new Error('database down');
+    });
 
     await expect(
       service.handleClaimVerificationReconciliation(),
